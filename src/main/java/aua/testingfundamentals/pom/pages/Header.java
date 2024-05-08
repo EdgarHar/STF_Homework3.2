@@ -23,8 +23,7 @@ public class Header extends BasePage {
   }
 
   public ItemPage searchItem(String itemName) {
-    driver.findElement(HeaderLocators.SEARCH_LOCATOR).sendKeys(itemName);
-    driver.findElement(HeaderLocators.SEARCH_LOCATOR).sendKeys(Keys.ENTER);
+    driver.findElement(HeaderLocators.SEARCH_LOCATOR).sendKeys(itemName, Keys.ENTER);
 
     return new ItemPage(driver, webDriverWait);
   }
