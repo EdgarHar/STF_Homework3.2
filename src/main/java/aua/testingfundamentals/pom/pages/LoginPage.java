@@ -7,27 +7,25 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class LoginPage extends BasePage {
 
-  private static final String LOGIN_USERNAME           = "VaspurVaspuryan";
-  private static final String LOGIN_PASSWORD           = "123456789";
-  private static final String INCORRECT_LOGIN_USERNAME = "SomeIncorrectUser";
-  private static final String INCORRECT_LOGIN_PASSWORD = "SomeIncorrectPassword";
-
   public LoginPage(final WebDriver driver, final WebDriverWait wait) {
     super(driver, wait);
   }
 
   public HomePage loginSuccessfully() {
-    enterUsername(LOGIN_USERNAME);
-    enterPassword(LOGIN_PASSWORD);
     driver.findElement(LoginPageLocators.SUBMIT_LOCATOR).click();
 
     return new HomePage(driver, webDriverWait);
   }
 
   public LoginPage loginFailed() {
-    enterUsername(INCORRECT_LOGIN_USERNAME);
-    enterPassword(INCORRECT_LOGIN_PASSWORD);
     driver.findElement(LoginPageLocators.SUBMIT_LOCATOR).click();
+
+    return this;
+  }
+
+  public LoginPage enterCredentials(final String username, final String password) {
+    enterUsername(username);
+    enterPassword(password);
 
     return this;
   }

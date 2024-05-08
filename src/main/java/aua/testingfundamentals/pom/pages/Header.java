@@ -2,11 +2,9 @@ package aua.testingfundamentals.pom.pages;
 
 import aua.testingfundamentals.pom.base.BasePage;
 import aua.testingfundamentals.pom.locators.HeaderLocators;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.util.List;
 
 public class Header extends BasePage {
 
@@ -26,6 +24,7 @@ public class Header extends BasePage {
 
   public ItemPage searchItem(String itemName) {
     driver.findElement(HeaderLocators.SEARCH_LOCATOR).sendKeys(itemName);
+    driver.findElement(HeaderLocators.SEARCH_LOCATOR).sendKeys(Keys.ENTER);
 
     return new ItemPage(driver, webDriverWait);
   }

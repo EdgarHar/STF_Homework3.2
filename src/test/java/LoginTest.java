@@ -1,4 +1,6 @@
+import aua.testingfundamentals.pom.pages.Header;
 import aua.testingfundamentals.pom.pages.HomePage;
+import aua.testingfundamentals.pom.pages.LoginPage;
 import base.BaseTest;
 import org.testng.annotations.Test;
 
@@ -11,16 +13,23 @@ public class LoginTest extends BaseTest {
 
   @Test
   public void shouldLoginSuccessfully() {
-    final HomePage homepage = homePage.getHeader().navigateToLoginPage().loginSuccessfully();
+    final Header headerPage = homePage.getHeader();
+    final LoginPage loginPage = headerPage.navigateToLoginPage();
+    final HomePage homePage = loginPage.enterCredentials(LOGIN_USERNAME, LOGIN_PASSWORD).loginSuccessfully();
+    final Header finalHeaderPage = homePage.getHeader();
+    final String customerText = finalHeaderPage.getCustomerText();
 
-    assertThat(homepage.getHeader().getCustomerText())
+    assertThat(customerText)
         .isNotNull()
         .isEqualTo(LOGIN_SUCCESS_TEXT);
   }
 
   @Test
   public void shouldFailLogin() {
-    final String errorMessageText = homePage.getHeader().navigateToLoginPage().loginFailed().getErrorMessageText();
+    final Header headerPage = homePage.getHeader();
+    final LoginPage loginPage = headerPage.navigateToLoginPage();
+    final LoginPage failedLoginPage = loginPage.enterCredentials(INCORRECT_LOGIN_USERNAME, INCORRECT_LOGIN_PASSWORD).loginFailed();
+    final String errorMessageText = failedLoginPage.getErrorMessageText();
 
     assertThat(errorMessageText)
         .isNotNull()

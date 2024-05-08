@@ -1,3 +1,8 @@
+import aua.testingfundamentals.pom.pages.CartPage;
+import aua.testingfundamentals.pom.pages.Header;
+import aua.testingfundamentals.pom.pages.HomePage;
+import aua.testingfundamentals.pom.pages.ItemPage;
+import aua.testingfundamentals.pom.pages.LoginPage;
 import base.BaseTest;
 import org.testng.annotations.Test;
 
@@ -13,44 +18,41 @@ public class ShopTest extends BaseTest {
 
   @Test
   public void shouldSearchItem() {
-    final String description = homePage
-        .getHeader()
-        .navigateToLoginPage()
-        .loginSuccessfully()
-        .getHeader()
-        .searchItem(ITEM_NAME)
-        .getProductDescription();
+    final Header headerPage = homePage.getHeader();
+    final LoginPage loginPage = headerPage.navigateToLoginPage();
+    final HomePage loggedInHomePage = loginPage.enterCredentials(LOGIN_USERNAME, LOGIN_PASSWORD).loginSuccessfully();
+    final Header loggedInHeader = loggedInHomePage.getHeader();
+    final ItemPage searchedHomePage = loggedInHeader.searchItem(ITEM_NAME);
+    final String description = searchedHomePage.getProductDescription();
 
     assertThat(description).isNotNull().contains(ITEM_DESCRIPTION);
   }
 
   @Test
   public void shouldCheckout() {
-    final String orderSuccessMessage = homePage
-        .getHeader()
-        .navigateToLoginPage()
-        .loginSuccessfully()
-        .getHeader()
-        .searchItem(ITEM_NAME)
-        .addToCart()
-        .checkout()
-        .confirmCheckout()
-        .getConfirmMessage();
+    final Header headerPage = homePage.getHeader();
+    final LoginPage loginPage = headerPage.navigateToLoginPage();
+    final HomePage loggedInHomePage = loginPage.enterCredentials(LOGIN_USERNAME, LOGIN_PASSWORD).loginSuccessfully();
+    final Header loggedInHeader = loggedInHomePage.getHeader();
+    final ItemPage searchedItemPage = loggedInHeader.searchItem(ITEM_NAME);
+    final CartPage cartPage = searchedItemPage.addToCart();
+    final CartPage checkoutCart = cartPage.checkout();
+    final CartPage.ConfirmPage confirmationPage = checkoutCart.confirmCheckout();
+    final String orderSuccessMessage = confirmationPage.getConfirmMessage();
 
     assertThat(orderSuccessMessage).isNotNull().contains(ORDER_SUCCESS_PREFIX).contains(ORDER_SUCCESS_SUFFIX);
   }
 
   @Test
   public void shouldDeleteItemFromCart() {
-    final String emptyCartMessage = homePage
-        .getHeader()
-        .navigateToLoginPage()
-        .loginSuccessfully()
-        .getHeader()
-        .searchItem(ITEM_NAME)
-        .addToCart()
-        .removeItemFromCart()
-        .getEmptyCartMessage();
+    final Header headerPage = homePage.getHeader();
+    final LoginPage loginPage = headerPage.navigateToLoginPage();
+    final HomePage loggedInHomePage = loginPage.enterCredentials(LOGIN_USERNAME, LOGIN_PASSWORD).loginSuccessfully();
+    final Header loggedInHeader = loggedInHomePage.getHeader();
+    final ItemPage searchedItemPage = loggedInHeader.searchItem(ITEM_NAME);
+    final CartPage cartPage = searchedItemPage.addToCart();
+    final CartPage cartAfterRemoval = cartPage.removeItemFromCart();
+    final String emptyCartMessage = cartAfterRemoval.getEmptyCartMessage();
 
     assertThat(emptyCartMessage).isNotNull().contains(EMPTY_CART_MESSAGE);
   }
